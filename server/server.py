@@ -1,14 +1,13 @@
 # API for text recognition and summarization
 
-import flask
-from flask import jsonify
+from quart import Quart, request, jsonify
 
-from ocr import test_ocr_engine
+from ocr import test_ocr_engine, multi_ocr
 
-app = flask.Flask(__name__)
+app = Quart(__name__)
 app.config["DEBUG"] = True
 
-
+# ROUTES FOR TESTING
 @app.route("/api/", methods=["GET"])
 def home():
     # test API status
@@ -16,9 +15,9 @@ def home():
 
 
 @app.route("/api/test/ocr", methods=["GET"])
-def ocr():
+async def ocr():
     # test OCR function
-    engine_status, error_message, text = test_ocr_engine()
+    engine_status, error_message, text = await test_ocr_engine()
     if engine_status == "Working":
         return (
             jsonify(
@@ -39,6 +38,14 @@ def ocr():
             ),
             500,
         )
+
+
+# ROUTES FOR THE CLIENT
+@app.route("/api/ocr/multi", methods=["POST"])
+async def ocr_m():
+    dict_str = await request.get_json()
+    result = await multi_ocr(dict_str)
+    return jsonify(result), 200
 
 
 app.run()
