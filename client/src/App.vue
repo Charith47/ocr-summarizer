@@ -7,7 +7,6 @@
 		</v-app-bar>
 
 		<v-main class="grey lighten-3">
-
 			<!-- error messages -->
 			<v-alert v-if="noFilesError" class="rounded-0" dense type="error">{{
 				noFilesError
@@ -81,6 +80,13 @@
 											label="Extracted test"
 											:value="extractedText"
 										></v-textarea>
+									</v-container>
+									<v-container>
+										<v-textarea
+											outlined
+											label="Summarized test"
+											value="Heh"
+										></v-textarea>
 										<v-btn color="primary"> Summarize </v-btn>
 									</v-container>
 								</v-container>
@@ -126,7 +132,7 @@
 
 			<!-- uploading files -->
 			<v-snackbar v-model="snackbar">
-				{{ text }}
+				{{ uploadMessage }}
 
 				<template v-slot:action="{ attrs }">
 					<v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
@@ -184,8 +190,8 @@ export default {
 		],
 
 		// info messages
-		snackbar: true,
-		text: 'Hello',
+		snackbar: false,
+		uploadMessage: 'Your files are being processed',
 
 		// error messages
 		noFilesError: '',
@@ -212,23 +218,23 @@ export default {
 			});
 		},
 		uploadFiles() {
+			// add loading button
 			// handle 0 files
 			if (this.parsedFiles.length === 0) {
 				this.noFilesError = 'No files are selected. Please select some images';
 				return;
 			}
-
+			this.snackbar = true;
 			axios
 				.post('http://127.0.0.1:3001/api/ocr/s/multi', this.parsedFiles)
 				.then((response) => {
 					response.data.forEach((textObj) => {
-						this.extractedText += textObj.name;
-						this.extractedText += textObj.text;
-						this.extractedText += '\n\n';
+						this.extractedText += `${textObj.name}\n`;
+						this.extractedText += `${textObj.text}\n\n`;
 					});
 				})
 				.catch((error) => {
-					this.apiError = `${error.message}. Please try again later `;
+					this.apiError = `${error.message}. Please try again later`;
 				});
 		},
 		toBase64(file) {
