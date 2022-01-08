@@ -33,7 +33,39 @@
 					</v-col>
 
 					<v-col cols="12" sm="8">
-						<v-sheet min-height="70vh" rounded="lg"> </v-sheet>
+						<v-sheet min-height="70vh" rounded="lg">
+							<v-container>
+								<v-container>
+									<v-container>
+										<h2 class="">Upload your images</h2>
+									</v-container>
+									<v-container>
+										<v-file-input
+											outlined
+											dense
+											accept="image/png, image/jpeg"
+											chips
+											show-size
+											counter
+											multiple
+											truncate-length="15"
+											label="Images"
+										></v-file-input>
+										<v-btn color="primary"> Upload </v-btn>
+									</v-container>
+								</v-container>
+
+								<v-container>
+									<v-container>
+										<h2 class="">Detected text</h2>
+									</v-container>
+									<v-container>
+										<v-textarea outlined label="Detected test"></v-textarea>
+										<v-btn color="primary"> Summarize </v-btn>
+									</v-container>
+								</v-container>
+							</v-container>
+						</v-sheet>
 					</v-col>
 
 					<v-col cols="12" sm="2">
@@ -49,14 +81,12 @@
 									<h3 class="mx-2">Contributors</h3>
 								</div>
 
-
 								<v-list-item two-line>
 									<v-list-item-content>
 										<v-list-item-title>C.W Dissanayake</v-list-item-title>
 										<v-list-item-subtitle>D/BCE/20/0009</v-list-item-subtitle>
 									</v-list-item-content>
 								</v-list-item>
-
 							</v-container>
 						</v-sheet>
 					</v-col>

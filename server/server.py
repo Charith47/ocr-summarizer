@@ -1,8 +1,7 @@
 # API for text recognition and summarization
-
 from quart import Quart, request, jsonify
 
-from ocr import test_ocr_engine, multi_ocr
+from ocr_serial import s_test_ocr_engine, s_multi_ocr
 
 app = Quart(__name__)
 app.config["DEBUG"] = True
@@ -17,7 +16,7 @@ def home():
 @app.route("/api/test/ocr", methods=["GET"])
 async def ocr():
     # test OCR function
-    engine_status, error_message, text = await test_ocr_engine()
+    engine_status, error_message, text = await s_test_ocr_engine()
     if engine_status == "Working":
         return (
             jsonify(
@@ -41,11 +40,12 @@ async def ocr():
 
 
 # ROUTES FOR THE CLIENT
-@app.route("/api/ocr/multi", methods=["POST"])
+@app.route("/api/ocr/s/multi", methods=["POST"])
 async def ocr_m():
     dict_str = await request.get_json()
-    result = await multi_ocr(dict_str)
+    result = await s_multi_ocr(dict_str)
     return jsonify(result), 200
 
+# @app.route("/api/ocr/p")
 
-app.run()
+app.run(port=3001)
