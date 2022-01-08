@@ -22,12 +22,9 @@
 									/>
 									<h3 class="mx-2">About</h3>
 								</div>
-								<p class="body-1">
-									Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem
-									corporis autem, pariatur mollitia maiores quidem nisi minima
-									maxime at, debitis eaque illo nulla amet? Minus officiis ut
-									quasi minima voluptatem!
-								</p>
+								<br>
+								<p class="body-1" style="text-align:justify">
+									AccuText acts as a text recognizer and a summarizer which can extract and summarize text from uploaded images. Start by uploading your images and clicking the upload button to get the extracted and summarize button to get the summarized text.								</p>
 							</v-container>
 						</v-sheet>
 					</v-col>
@@ -57,11 +54,20 @@
 
 								<v-container>
 									<v-container>
-										<h2 class="">Detected text</h2>
+										<h2 class="">Extracted text</h2>
 									</v-container>
 									<v-container>
-										<v-textarea outlined label="Detected test"></v-textarea>
+										<v-textarea outlined label="Extracted text"></v-textarea>
 										<v-btn color="primary"> Summarize </v-btn>
+									</v-container>
+								</v-container>
+
+								<v-container>
+									<v-container>
+										<h2 class="">Summarized text</h2>
+									</v-container>
+									<v-container>
+										<v-textarea outlined label="Summarized text"></v-textarea>
 									</v-container>
 								</v-container>
 							</v-container>
@@ -85,6 +91,18 @@
 									<v-list-item-content>
 										<v-list-item-title>C.W Dissanayake</v-list-item-title>
 										<v-list-item-subtitle>D/BCE/20/0009</v-list-item-subtitle>
+										<br>
+										<v-list-item-title>S.P.Gayanika</v-list-item-title>
+										<v-list-item-subtitle>D/BCE/20/0007</v-list-item-subtitle>
+										<br>
+										<v-list-item-title>R.W.B.M.P.Nishadi</v-list-item-title>
+										<v-list-item-subtitle>D/BSE/20/0018</v-list-item-subtitle>
+										<br>
+										<v-list-item-title>T.W.L.A.Perera</v-list-item-title>
+										<v-list-item-subtitle>D/BCS/20/0010</v-list-item-subtitle>
+										<br>
+										<v-list-item-title>G.M.T.Amarasinghe</v-list-item-title>
+										<v-list-item-subtitle>D/BCS/20/00012</v-list-item-subtitle>
 									</v-list-item-content>
 								</v-list-item>
 							</v-container>
