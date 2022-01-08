@@ -77,8 +77,12 @@ async def summarize(text, top_sentence_n=5):
     ranked_sentence = sorted(
         ((scores[i], s) for i, s in enumerate(sentences)), reverse=True
     )
-    
-    for i in range(top_sentence_n):
-      summarized.append(" ".join(ranked_sentence[i][1]))
+
+    if len(ranked_sentence) < top_sentence_n:
+        for i in range(len(ranked_sentence)):
+            summarized.append(" ".join(ranked_sentence[i][1]))
+    else:
+        for i in range(top_sentence_n):
+            summarized.append(" ".join(ranked_sentence[i][1]))
 
     return ". ".join(summarized)

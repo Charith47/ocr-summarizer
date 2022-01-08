@@ -85,9 +85,11 @@
 										<v-textarea
 											outlined
 											label="Summarized test"
-											value="Heh"
+											:value="summarizedText"
 										></v-textarea>
-										<v-btn color="primary"> Summarize </v-btn>
+										<v-btn color="primary" @click="getSummary">
+											Summarize
+										</v-btn>
 									</v-container>
 								</v-container>
 							</v-container>
@@ -164,7 +166,8 @@ export default {
 		// app data
 		parsedFiles: [],
 		extractedText: '',
-
+		extractedToSummary: '',
+		summarizedText: '',
 		// misc
 		contributors: [
 			{
@@ -231,6 +234,8 @@ export default {
 					response.data.forEach((textObj) => {
 						this.extractedText += `${textObj.name}\n`;
 						this.extractedText += `${textObj.text}\n\n`;
+
+						this.extractedToSummary += `${textObj.text}`;
 					});
 				})
 				.catch((error) => {
@@ -244,6 +249,19 @@ export default {
 				reader.onload = () => resolve(reader.result);
 				reader.onerror = (error) => reject(error);
 			});
+		},
+		getSummary() {
+			// handle no text
+			axios
+				.post('http://127.0.0.1:3001/api/summary', {
+					text: this.extractedToSummary,
+				})
+				.then((response) => {
+					this.summarizedText = response.data.summary;
+				})
+				.catch((error) => {
+					console.log(error.message);
+				});
 		},
 	},
 };
