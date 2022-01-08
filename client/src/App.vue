@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
 	<v-app id="inspire">
 		<v-app-bar app color="white" flat>
@@ -39,8 +38,10 @@
 									<v-container>
 										<h2 class="">Upload your images</h2>
 									</v-container>
+
 									<v-container>
 										<v-file-input
+											@change="parseFiles"
 											outlined
 											dense
 											accept="image/png, image/jpeg"
@@ -51,7 +52,7 @@
 											truncate-length="15"
 											label="Images"
 										></v-file-input>
-										<v-btn color="primary"> Upload </v-btn>
+										<v-btn color="primary" @click="uploadFiles"> Upload </v-btn>
 									</v-container>
 								</v-container>
 
@@ -60,7 +61,7 @@
 										<h2 class="">Detected text</h2>
 									</v-container>
 									<v-container>
-										<v-textarea outlined label="Detected test"></v-textarea>
+										<v-textarea outlined label="Detected test" :value="extractedText"></v-textarea>
 										<v-btn color="primary"> Summarize </v-btn>
 									</v-container>
 								</v-container>
@@ -110,9 +111,44 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
 	data: () => ({
-		focus: false,
+		parsedFiles: [],
+		extractedText: ""
 	}),
+	methods: {
+		parseFiles(files) {
+			files.forEach(async (file) => {
+				const b64_string = await this.toBase64(file);
+				this.parsedFiles.push({
+					name: file.name,
+					image: b64_string.split(',')[1],
+				});
+			});
+		},
+		uploadFiles() {
+			axios
+				.post('http://127.0.0.1:3001/api/ocr/s/multi', this.parsedFiles)
+				.then((response) => {
+					console.log(response.data);
+					response.data.forEach(textObj=>{
+						this.extractedText += textObj.text;
+						this.extractedText += "\n\n\n"
+					})
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		toBase64(file) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = () => resolve(reader.result);
+				reader.onerror = (error) => reject(error);
+			});
+		},
+	},
 };
 </script>

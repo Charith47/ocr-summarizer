@@ -1,9 +1,12 @@
 # API for text recognition and summarization
 from quart import Quart, request, jsonify
+from quart_cors import cors
 
 from ocr_serial import s_test_ocr_engine, s_multi_ocr
 
 app = Quart(__name__)
+app = cors(app, allow_origin="*")
+
 app.config["DEBUG"] = True
 
 # ROUTES FOR TESTING
