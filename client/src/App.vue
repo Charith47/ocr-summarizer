@@ -52,13 +52,17 @@
 						<v-sheet min-height="60vh" rounded="lg">
 							<v-container>
 								<v-container>
-									<v-container>
-										<h2 class="">Upload your images</h2>
+									<v-container class="d-flex justify-space-between">
+										<h2 style="display: inline">Upload your images</h2>
+										<v-btn color="red lighten-1" icon @click="clearAll"
+											><v-icon>mdi-delete</v-icon></v-btn
+										>
 									</v-container>
 
 									<!-- file uploader -->
 									<v-container>
 										<v-file-input
+											ref="fileupload"
 											@change="parseFiles"
 											@click:clear="clearFiles"
 											outlined
@@ -71,7 +75,13 @@
 											truncate-length="15"
 											placeholder="Select images to upload"
 										></v-file-input>
-										<v-btn color="primary" @click="uploadFiles"> Upload </v-btn>
+										<v-btn
+											color="#6989ff"
+											class="white--text"
+											@click="uploadFiles"
+										>
+											Upload
+										</v-btn>
 									</v-container>
 								</v-container>
 
@@ -93,7 +103,11 @@
 													label="Extracted text"
 													v-model="extractedText"
 												></v-textarea>
-												<v-btn color="primary" @click="getSummary">
+												<v-btn
+													color="#6989ff"
+													class="white--text"
+													@click="getSummary"
+												>
 													Summarize
 												</v-btn>
 											</v-container>
@@ -317,6 +331,12 @@ export default {
 		},
 		getWordCount() {
 			return this.wordCount;
+		},
+		clearAll() {
+			this.$refs.fileupload.reset();
+			this.parsedFiles = [];
+			this.extractedText = '';
+			this.summarizedText = '';
 		},
 	},
 	computed: {
