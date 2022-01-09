@@ -56,6 +56,7 @@
 										<h2 class="">Upload your images</h2>
 									</v-container>
 
+									<!-- file uploader -->
 									<v-container>
 										<v-file-input
 											@change="parseFiles"
@@ -74,63 +75,66 @@
 									</v-container>
 								</v-container>
 
+								<v-divider></v-divider>
 								<v-container>
 									<v-row>
+										<!-- Extracted text view -->
 										<v-col>
 											<v-container>
-												<h2 class="">Extracted text</h2>
+												<h2>Extracted text</h2>
 											</v-container>
+											<span></span>
 											<v-container>
 												<v-textarea
+													height="250"
 													no-resize
 													outlined
+													placeholder="Extracted text"
 													label="Extracted text"
-													:value="extractedText"
+													v-model="extractedText"
 												></v-textarea>
 												<v-btn color="primary" @click="getSummary">
 													Summarize
 												</v-btn>
 											</v-container>
 										</v-col>
+
+										<!-- Summarized text view -->
 										<v-col>
-											<v-container>
-												<h2 class="">Summarized text</h2>
+											<v-container class="px-0">
+												<h2>Summarized text</h2>
 											</v-container>
 											<v-container class="px-0">
 												<v-textarea
+													height="250"
 													no-resize
 													outlined
+													placeholder="Summarized text"
 													label="Summarized text"
-													:value="summarizedText"
+													v-model="summarizedText"
 												></v-textarea>
 											</v-container>
 										</v-col>
 									</v-row>
+									<span class="px-3">
+										<h5 style="display: inline">
+											Word count •
+											<p style="display: inline">
+												Extracted
+												<span class="red--text">{{
+													wordCount(this.extractedText)
+												}}</span>
+												|
+											</p>
+											<p style="display: inline">
+												Summary
+												<span class="blue--text">{{
+													wordCount(this.summarizedText)
+												}}</span>
+											</p>
+										</h5></span
+									>
 								</v-container>
-								<!--
-								<v-container>
-									<v-container>
-										<h2 class="">Extracted text</h2>
-									</v-container>
-									<v-container>
-										<v-textarea
-											outlined
-											label="Extracted test"
-											:value="extractedText"
-										></v-textarea>
-									</v-container>
-									<v-container>
-										<v-textarea
-											outlined
-											label="Summarized test"
-											:value="summarizedText"
-										></v-textarea>
-										<v-btn color="primary" @click="getSummary">
-											Summarize
-										</v-btn>
-									</v-container>
-								</v-container>
-								-->
 							</v-container>
 						</v-sheet>
 					</v-col>
@@ -171,7 +175,7 @@
 				</v-row>
 			</v-container>
 
-			<!-- uploading files -->
+			<!-- uploading files snackbar -->
 			<v-snackbar v-model="snackbar">
 				{{ uploadMessage }}
 
@@ -200,6 +204,7 @@
 
 <script>
 import axios from 'axios';
+
 export default {
 	data: () => ({
 		// app data
@@ -265,10 +270,10 @@ export default {
 		},
 		uploadFiles() {
 			// add loading button
-			// handle 0 files
 			this.noTextError = '';
 			this.apiError = '';
 
+			// handle 0 files
 			if (this.parsedFiles.length === 0) {
 				this.noFilesError = 'No files are selected. Please select some images';
 				return;
@@ -296,7 +301,6 @@ export default {
 		getSummary() {
 			// handle no text
 			if (this.extractedText.trim() === '') {
-				// error
 				this.noTextError = 'Error. No text to summarize';
 				return;
 			}
@@ -310,6 +314,14 @@ export default {
 				.catch((error) => {
 					console.log(error.message);
 				});
+		},
+		getWordCount() {
+			return this.wordCount;
+		},
+	},
+	computed: {
+		wordCount() {
+			return (text) => text.match(/\s+/g)?.length || 0;
 		},
 	},
 };
