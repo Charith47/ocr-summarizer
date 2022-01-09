@@ -1,3 +1,4 @@
+import os
 import io
 import base64
 import numpy as np
@@ -8,12 +9,14 @@ import pytesseract as pt
 
 from helpers import string_cleaner
 
-pt.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+pt.pytesseract.tesseract_cmd = str(
+    os.environ.get("TESSERACT", "C:\\Program Files\\Tesseract-OCR\\tesseract.exe")
+)
 
 
-async def s_test_ocr_engine():
+async def test_ocr_engine():
     try:
-        img = cv.imread("../assets/test-paper.jpg")
+        img = cv.imread("./assets/test-paper.jpg")
         img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         text = pt.image_to_string(img)
         return "Working", None, text
@@ -21,7 +24,7 @@ async def s_test_ocr_engine():
         return "NOT working", str(e), None
 
 
-async def s_multi_ocr(b64_images: list):
+async def multi_ocr(b64_images: list):
     # args: list [{name,b64_string}]
     # returns list of results [{name,text}..]
     results = []

@@ -6,7 +6,8 @@ from nltk.cluster.util import cosine_distance
 import numpy as np
 import networkx as nx
 
-from helpers import string_cleaner
+from helpers import string_cleaner, read_file
+
 
 def text_sanitizer(text: str):
     sentences = text.split(". ")
@@ -87,3 +88,11 @@ async def summarize(text, top_sentence_n=5):
             summarized.append(" ".join(ranked_sentence[i][1]))
 
     return string_cleaner(". ".join(summarized))
+
+
+async def test_summary_engine():
+    try:
+        text = read_file("test")
+        return "Working", None, await summarize(text)
+    except Exception as e:
+        return "NOT working", str(e), None
