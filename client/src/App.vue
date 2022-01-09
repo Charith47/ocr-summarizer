@@ -240,6 +240,7 @@
 
 <script>
 import axios from 'axios';
+const API_ENDPOINT = process.env.VUE_APP_API;
 
 export default {
 	data: () => ({
@@ -288,6 +289,7 @@ export default {
 			this.parsedFiles = [];
 		},
 		parseFiles(files) {
+			console.log(API_ENDPOINT);
 			// remove file errors
 			this.noFilesError = '';
 			this.parseError = '';
@@ -317,7 +319,7 @@ export default {
 			}
 			this.snackbar = true;
 			axios
-				.post('http://127.0.0.1:3001/api/ocr/s/multi', this.parsedFiles)
+				.post(`${API_ENDPOINT}/ocr`, this.parsedFiles)
 				.then((response) => {
 					response.data.forEach((textObj) => {
 						this.extractedText += `${textObj.text}\n`;
@@ -342,7 +344,7 @@ export default {
 				return;
 			}
 			axios
-				.post('http://127.0.0.1:3001/api/summary', {
+				.post(`${API_ENDPOINT}/summary`, {
 					text: this.extractedText,
 				})
 				.then((response) => {
