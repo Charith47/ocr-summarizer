@@ -289,7 +289,6 @@ export default {
 			this.parsedFiles = [];
 		},
 		parseFiles(files) {
-			console.log(API_ENDPOINT);
 			// remove file errors
 			this.noFilesError = '';
 			this.parseError = '';
