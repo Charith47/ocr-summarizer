@@ -20,6 +20,13 @@
 			<v-alert v-if="noTextError" class="rounded-0" dense type="error">{{
 				noTextError
 			}}</v-alert>
+			<v-alert
+				v-if="noContentToDownload"
+				class="rounded-0"
+				dense
+				type="error"
+				>{{ noContentToDownload }}</v-alert
+			>
 
 			<v-container>
 				<v-row>
@@ -127,6 +134,21 @@
 													label="Summarized text"
 													v-model="summarizedText"
 												></v-textarea>
+
+												<!-- download button -->
+												<v-container
+													class="pa-0 ma-0 d-flex justify-space-between"
+												>
+													<div style="display: inline-block"></div>
+													<v-btn
+														class="green lighten-1 white--text"
+														@click="downloadText"
+														>download
+														<v-icon class="ml-2">
+															mdi-cloud-download</v-icon
+														></v-btn
+													>
+												</v-container>
 											</v-container>
 										</v-col>
 									</v-row>
@@ -259,6 +281,7 @@ export default {
 		parseError: '',
 		apiError: '',
 		noTextError: '',
+		noContentToDownload: '',
 	}),
 	methods: {
 		clearFiles() {
@@ -286,7 +309,7 @@ export default {
 			// add loading button
 			this.noTextError = '';
 			this.apiError = '';
-
+			this.noContentToDownload = '';
 			// handle 0 files
 			if (this.parsedFiles.length === 0) {
 				this.noFilesError = 'No files are selected. Please select some images';
@@ -329,8 +352,32 @@ export default {
 					console.log(error.message);
 				});
 		},
-		getWordCount() {
-			return this.wordCount;
+		downloadText() {
+			// add checks
+			if (
+				this.extractedText.trim() === '' &&
+				this.summarizedText.trim() === ''
+			) {
+				// error
+				this.noContentToDownload =
+					'No text to download. Please upload some files first.';
+				return;
+			}
+			if (this.extractedText.trim() != '') {
+				let blob = new Blob([this.extractedText], { type: 'text/plain' });
+				let link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = 'extracted.txt';
+				link.click();
+			}
+
+			if (this.summarizedText.trim() != '') {
+				let blob = new Blob([this.summarizedText], { type: 'text/plain' });
+				let link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = 'summarized.txt';
+				link.click();
+			}
 		},
 		clearAll() {
 			this.$refs.fileupload.reset();
