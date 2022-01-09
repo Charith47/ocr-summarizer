@@ -17,6 +17,9 @@
 			<v-alert v-if="parseError" class="rounded-0" dense type="error">{{
 				parseError
 			}}</v-alert>
+			<v-alert v-if="noTextError" class="rounded-0" dense type="error">{{
+				noTextError
+			}}</v-alert>
 
 			<v-container>
 				<v-row>
@@ -46,7 +49,7 @@
 
 					<!-- main app -->
 					<v-col cols="12" sm="8">
-						<v-sheet min-height="70vh" rounded="lg">
+						<v-sheet min-height="60vh" rounded="lg">
 							<v-container>
 								<v-container>
 									<v-container>
@@ -56,6 +59,7 @@
 									<v-container>
 										<v-file-input
 											@change="parseFiles"
+											@click:clear="clearFiles"
 											outlined
 											dense
 											accept="image/png, image/jpeg"
@@ -70,6 +74,40 @@
 									</v-container>
 								</v-container>
 
+								<v-container>
+									<v-row>
+										<v-col>
+											<v-container>
+												<h2 class="">Extracted text</h2>
+											</v-container>
+											<v-container>
+												<v-textarea
+													no-resize
+													outlined
+													label="Extracted text"
+													:value="extractedText"
+												></v-textarea>
+												<v-btn color="primary" @click="getSummary">
+													Summarize
+												</v-btn>
+											</v-container>
+										</v-col>
+										<v-col>
+											<v-container>
+												<h2 class="">Summarized text</h2>
+											</v-container>
+											<v-container class="px-0">
+												<v-textarea
+													no-resize
+													outlined
+													label="Summarized text"
+													:value="summarizedText"
+												></v-textarea>
+											</v-container>
+										</v-col>
+									</v-row>
+								</v-container>
+								<!--
 								<v-container>
 									<v-container>
 										<h2 class="">Extracted text</h2>
@@ -92,6 +130,7 @@
 										</v-btn>
 									</v-container>
 								</v-container>
+								-->
 							</v-container>
 						</v-sheet>
 					</v-col>
@@ -166,8 +205,8 @@ export default {
 		// app data
 		parsedFiles: [],
 		extractedText: '',
-		extractedToSummary: '',
 		summarizedText: '',
+
 		// misc
 		contributors: [
 			{
@@ -200,8 +239,12 @@ export default {
 		noFilesError: '',
 		parseError: '',
 		apiError: '',
+		noTextError: '',
 	}),
 	methods: {
+		clearFiles() {
+			this.parsedFiles = [];
+		},
 		parseFiles(files) {
 			// remove file errors
 			this.noFilesError = '';
@@ -223,6 +266,9 @@ export default {
 		uploadFiles() {
 			// add loading button
 			// handle 0 files
+			this.noTextError = '';
+			this.apiError = '';
+
 			if (this.parsedFiles.length === 0) {
 				this.noFilesError = 'No files are selected. Please select some images';
 				return;
@@ -232,10 +278,7 @@ export default {
 				.post('http://127.0.0.1:3001/api/ocr/s/multi', this.parsedFiles)
 				.then((response) => {
 					response.data.forEach((textObj) => {
-						this.extractedText += `${textObj.name}\n`;
-						this.extractedText += `${textObj.text}\n\n`;
-
-						this.extractedToSummary += `${textObj.text}`;
+						this.extractedText += `${textObj.text}\n`;
 					});
 				})
 				.catch((error) => {
@@ -252,9 +295,14 @@ export default {
 		},
 		getSummary() {
 			// handle no text
+			if (this.extractedText.trim() === '') {
+				// error
+				this.noTextError = 'Error. No text to summarize';
+				return;
+			}
 			axios
 				.post('http://127.0.0.1:3001/api/summary', {
-					text: this.extractedToSummary,
+					text: this.extractedText,
 				})
 				.then((response) => {
 					this.summarizedText = response.data.summary;

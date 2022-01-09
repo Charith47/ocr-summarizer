@@ -6,6 +6,8 @@ from PIL import Image
 import cv2 as cv
 import pytesseract as pt
 
+from helpers import string_cleaner
+
 pt.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 
@@ -31,5 +33,5 @@ async def s_multi_ocr(b64_images: list):
         image = cv.cvtColor(np.array(image), cv.COLOR_BGR2RGB)
         text = pt.image_to_string(image)
 
-        results.append({"name": b64_image["name"], "text": text})
+        results.append({"name": b64_image["name"], "text": string_cleaner(text)})
     return results

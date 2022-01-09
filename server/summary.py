@@ -6,6 +6,7 @@ from nltk.cluster.util import cosine_distance
 import numpy as np
 import networkx as nx
 
+from helpers import string_cleaner
 
 def text_sanitizer(text: str):
     sentences = text.split(". ")
@@ -85,4 +86,4 @@ async def summarize(text, top_sentence_n=5):
         for i in range(top_sentence_n):
             summarized.append(" ".join(ranked_sentence[i][1]))
 
-    return ". ".join(summarized)
+    return string_cleaner(". ".join(summarized))
