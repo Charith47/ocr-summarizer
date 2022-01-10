@@ -350,7 +350,7 @@ export default {
 					this.summarizedText = response.data.summary;
 				})
 				.catch((error) => {
-					console.log(error.message);
+					this.apiError = `${error.message}. Please try again later`;
 				});
 		},
 		downloadText() {
