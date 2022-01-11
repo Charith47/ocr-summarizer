@@ -269,7 +269,7 @@ export default {
 			},
 			{
 				name: 'G.M.T Amarasinghe',
-				sid: 'D/BCS/20/00012',
+				sid: 'D/BCS/20/0012',
 			},
 		],
 
