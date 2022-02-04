@@ -1,3 +1,11 @@
+## User Interface Preview
+- User interface of initial page.
+
+![page-ui](./images/page-ui.png)
+- User interface while in use.
+
+![page-ui-use](./images/page-ui-use.png)
+
 ## Server Installation
 ### Required packages in Python (3.6+) environment
 - networkx
