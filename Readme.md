@@ -59,3 +59,7 @@
 - Use a simple web server to serve `dist` folder in `client` directory.
 
 - For example execute `python -m http.server` inside `dist` to serve the files of the directory. And visit the given link (i.e.`http://localhost:8000/`) to access the web client.
+
+## Future enhancements
+
+- Re-implement API in `JavaScript` and `Express.js` while keeping OCR/Summarization functionality in Python. 
