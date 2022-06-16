@@ -1,6 +1,5 @@
 import os
 
-# API for text recognition and summarization
 from quart import Quart, request, jsonify
 from quart_cors import cors
 

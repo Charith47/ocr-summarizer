@@ -1,13 +1,10 @@
-# summary
-# word count
+import os
+
 from nltk.corpus import stopwords
 from nltk.cluster.util import cosine_distance
 
 import numpy as np
 import networkx as nx
-
-from helpers import string_cleaner, read_file
-
 
 def text_sanitizer(text: str):
     sentences = text.split(". ")
@@ -87,12 +84,15 @@ async def summarize(text, top_sentence_n=5):
         for i in range(top_sentence_n):
             summarized.append(" ".join(ranked_sentence[i][1]))
 
-    return string_cleaner(". ".join(summarized))
+    return " ".join(". ".join(summarized).split())
 
 
 async def test_summary_engine():
     try:
-        text = read_file("test")
+
+        with open(os.path.join(os.path.dirname(__file__),'assets','test.txt'), "r") as file:
+            text = file.read().rstrip()
+
         return "Working", None, await summarize(text)
     except Exception as e:
         return "NOT working", str(e), None
